@@ -5,12 +5,22 @@ body {
 }
 
 canvas {
-    background-color: #777;
+    background-color: dodgerblue;
     border-radius: 0.3rem;
+    box-shadow: 1px 1px 8px #666;
+}
+
+button {
+    margin: auto 0;
+    padding: 1rem;
+    font-size: 2rem;
+    cursor: pointer;
+
 }
 
 #spectral-centroid {
     font-size: 6rem;
+    min-height: 6rem;
     width: 4ch;
     display: inline-block;
 }
@@ -23,4 +33,11 @@ canvas {
     padding: 1rem;
     text-align: right;
     width: 17rem;
+    box-shadow: 1px 1px 8px #666;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    max-width: 700px;
 }

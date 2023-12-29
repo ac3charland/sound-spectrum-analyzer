@@ -10,12 +10,15 @@
   <body>
     <h1>Sound Spectrum Analyzer</h1>
     <canvas class="visualizer" width="700" height="300"></canvas>
-    <div class="spectral-centroid-meter__container">
-      <h2>Spectral Centroid</h2>
-      <div>
-        <span id="spectral-centroid"></span>
-        <span>hz</span>
+    <div class="flex">
+      <div class="spectral-centroid-meter__container">
+        <h2>Spectral Centroid</h2>
+        <div>
+          <span id="spectral-centroid"></span>
+          <span>hz</span>
+        </div>
       </div>
+      <button id="start-button">Start</button>
     </div>
     <script src="sound-analyzer.js"></script>
   </body>
