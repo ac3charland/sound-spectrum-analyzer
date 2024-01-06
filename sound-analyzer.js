@@ -1,10 +1,14 @@
 // TODO Mobile view
 // TODO Refine flow (write stories)
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
+// TODO draw scales before start
+// TODO Reorganize code into:
+  // TODO Lifecycle
+  // TODO Drawing
+  // TODO Audio Processing
 
-let isPlayerStarted = false;
 
-document.querySelector("#start-button").addEventListener("click", () => {
+document.getElementById("start-button").addEventListener("click", () => {
   if (
     navigator.mediaDevices &&
     navigator.mediaDevices.getUserMedia &&
@@ -16,6 +20,11 @@ document.querySelector("#start-button").addEventListener("click", () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then(function (stream) {
+
+        // Hide start button after app start
+        document.getElementById("start-button").hidden = true;
+
+
         const source = audioContext.createMediaStreamSource(stream);
 
         // Connect the audio source to an analyzer node
@@ -44,13 +53,10 @@ document.querySelector("#start-button").addEventListener("click", () => {
 
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        // Function to calculate RMS amplitude
-        function calculateRMS(dataArray) {
-          let sum = 0;
-          for (let i = 0; i < dataArray.length; i++) {
-            sum += dataArray[i] * dataArray[i];
-          }
-          return Math.sqrt(sum / dataArray.length);
+        // Function to calculate average amplitude
+        function calculateAvgAmp(dataArray) {
+          const arraySum = dataArray.reduce((a, value) => a + value, 0);
+          return arraySum / dataArray.length;
         }
 
         function convertFrequencyToX(frequency) {
@@ -65,6 +71,7 @@ document.querySelector("#start-button").addEventListener("click", () => {
 
         // Draw the frequency scale
         function drawFrequencyScale() {
+          // TODO DRY color & style
           canvasCtx.fillStyle = "black";
           canvasCtx.font = "10px Arial";
           canvasCtx.textAlign = "center";
@@ -106,32 +113,50 @@ document.querySelector("#start-button").addEventListener("click", () => {
         const LOUDNESS_HEIGHT = loudnessCanvas.height;
         const LOUDNESS_WIDTH = loudnessCanvas.width;
 
+        function drawLoudnessScale() {
+          loudnessCanvasCtx.fillStyle = "black";
+          loudnessCanvasCtx.font = "10px Arial";
+          loudnessCanvasCtx.textAlign = "center";
+
+          const loudnessTicks = [
+            10, 20, 30, 40, 50, 60, 70, 80, 90
+          ]
+
+          for (const loudness of loudnessTicks) {
+            loudnessCanvasCtx.fillRect(0, LOUDNESS_HEIGHT * loudness / 100, 4, 1);
+
+            if (loudness % 20 === 0) {
+              loudnessCanvasCtx.fillText(loudness.toString(), 12, LOUDNESS_HEIGHT - LOUDNESS_HEIGHT * loudness / 100 + 4);
+            }
+          }
+        }
+
         // Function to draw the loudness meter
         function drawLoudnessMeter() {
           // TODO refactor so this is only called once
           // Get frequency data
           analyzer.getByteFrequencyData(dataArray);
 
+          loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
+
           // Calculate RMS amplitude
-          const rms = calculateRMS(dataArray);
+          const avgAmp = calculateAvgAmp(dataArray);
 
           // Update loudness variable
 
           const referenceLevel = 255; // Adjust as needed
 
-          // Avoid log(0) by ensuring rms is not zero
-          const adjustedRMS = Math.max(rms, 1e-5);
+          const percent = Math.round(avgAmp / referenceLevel * 100);
 
-          const loudnessdB = 20 * Math.log10(adjustedRMS / referenceLevel);
           document.getElementById("loudness").textContent =
-            Math.round(loudnessdB);
+            percent;
 
           // Clear the canvas for the new frame
           loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
 
           // Draw the loudness meter
           loudnessCanvasCtx.fillStyle = "dodgerblue";
-          const loudnessMeterHeight = (loudnessdB + 35) / 35 * LOUDNESS_HEIGHT;
+          const loudnessMeterHeight = (avgAmp / referenceLevel) * LOUDNESS_HEIGHT;
           loudnessCanvasCtx.fillRect(
             LOUDNESS_WIDTH - 40,
             LOUDNESS_HEIGHT - loudnessMeterHeight,
@@ -139,6 +164,7 @@ document.querySelector("#start-button").addEventListener("click", () => {
             loudnessMeterHeight
           );
 
+          drawLoudnessScale();
           // Request the next animation frame
           requestAnimationFrame(drawLoudnessMeter);
         }
@@ -188,12 +214,12 @@ document.querySelector("#start-button").addEventListener("click", () => {
           canvasCtx.stroke();
           drawSpectralCentroidLine(spectralCentroid);
           drawFrequencyScale();
-
+          
           requestAnimationFrame(drawSpectrum);
         };
-
         drawSpectrum();
         drawLoudnessMeter();
+        
       })
       .catch(function (error) {
         // TODO Error handling
