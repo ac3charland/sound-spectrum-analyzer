@@ -20,6 +20,11 @@ canvas {
     box-shadow: 1px 1px 8px #666;
 }
 
+a, a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
 #spectrum-meter {
     background-color: dodgerblue;
 }
@@ -30,9 +35,9 @@ canvas {
 }
 
 button {
-    margin: auto 0;
-    padding: 1rem;
-    font-size: 2rem;
+    margin: auto 0 auto 3rem;
+    padding: 0.5rem;
+    font-size: 1.5rem;
     cursor: pointer;
 }
 
@@ -47,7 +52,7 @@ button {
 }
 
 .spectral-centroid-meter__container {
-    margin-top: 2rem;
+    margin-right: 2rem;
     border-radius: 1rem;
     background-color: #888;
     color: white;
@@ -55,10 +60,14 @@ button {
     text-align: right;
     width: 17rem;
     box-shadow: 1px 1px 8px #666;
+
+    h2 {
+        margin: 0;
+    }
 }
 
 .flex {
     display: flex;
-    justify-content: space-between;
     max-width: 900px;
+    margin-bottom: 2rem;
 }

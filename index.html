@@ -3,12 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A free web-based sound spectrum analyzer that measures the percieved brightness of a sound by calculating the signal's spectral centroid."
+    />
+    <meta name="keywords", content="brightness, spectral centroid, sound analyzer, sound spectrum analyzer" />
+    <meta name="author" content="Alex Charland alexcharland.com @alex_charland_music" />
     <link rel="stylesheet" href="style.css" />
     <title>Spectral Centroid Sound Meter</title>
   </head>
 
   <body>
-    <h1>Sound Spectrum Analyzer</h1>
+    <div class="flex">
+      <h1>
+        Sound Brightness Analyzer
+        <a
+          href="https://en.wikipedia.org/wiki/Spectral_centroid"
+          target="_blank"
+          >&#9432;</a
+        >
+      </h1>
+      <button id="start-button">Start</button>
+    </div>
     <div class="flex">
       <canvas id="spectrum-meter" width="700" height="300"></canvas>
       <canvas id="loudness-meter" width="40" height="300"></canvas>
@@ -29,7 +45,6 @@
         </div>
       </div>
     </div>
-    <button id="start-button">Start</button>
     <script src="sound-analyzer.js"></script>
   </body>
 </html>
