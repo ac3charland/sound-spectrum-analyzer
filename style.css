@@ -1,13 +1,32 @@
 body {
     color: dodgerblue;
-    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
     padding: 0 1rem;
 }
 
 canvas {
-    background-color: dodgerblue;
     border-radius: 0.3rem;
     box-shadow: 1px 1px 8px #666;
+}
+
+#spectrum-meter {
+    background-color: dodgerblue;
+}
+
+#loudness-meter {
+    margin-left: 1rem;
+    background-color: #777;
 }
 
 button {
@@ -15,13 +34,15 @@ button {
     padding: 1rem;
     font-size: 2rem;
     cursor: pointer;
-
 }
 
 #spectral-centroid {
+    width: 4ch;
+}
+
+.output {
     font-size: 6rem;
     min-height: 6rem;
-    width: 4ch;
     display: inline-block;
 }
 
@@ -39,5 +60,5 @@ button {
 .flex {
     display: flex;
     justify-content: space-between;
-    max-width: 700px;
+    max-width: 900px;
 }

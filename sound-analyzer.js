@@ -1,7 +1,8 @@
-// TODO Loudness meter
 // TODO Mobile view
 // TODO Refine flow (write stories)
-// TODO dynamic canvas size
+// TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
+
+let isPlayerStarted = false;
 
 document.querySelector("#start-button").addEventListener("click", () => {
   if (
@@ -30,12 +31,11 @@ document.querySelector("#start-button").addEventListener("click", () => {
         const dataArray = new Uint8Array(BUFFER_LENGTH);
 
         // Set up canvas context for visualizer
-        const canvas = document.querySelector(".visualizer");
+        const canvas = document.querySelector("#spectrum-meter");
         const canvasCtx = canvas.getContext("2d");
 
         const WIDTH = canvas.width;
         const HEIGHT = canvas.height;
-        console.log({WIDTH, HEIGHT})
 
         let displayUpdateCounter = 0;
         const displayUpdateFPS = 2;
@@ -43,6 +43,15 @@ document.querySelector("#start-button").addEventListener("click", () => {
           document.querySelector("#spectral-centroid");
 
         canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+        // Function to calculate RMS amplitude
+        function calculateRMS(dataArray) {
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i] * dataArray[i];
+          }
+          return Math.sqrt(sum / dataArray.length);
+        }
 
         function convertFrequencyToX(frequency) {
           const offSet = 0.41;
@@ -90,6 +99,48 @@ document.querySelector("#start-button").addEventListener("click", () => {
 
           // Draw line
           canvasCtx.fillRect(x, 0, 3, HEIGHT);
+        }
+
+        const loudnessCanvas = document.getElementById("loudness-meter");
+        const loudnessCanvasCtx = loudnessCanvas.getContext("2d");
+        const LOUDNESS_HEIGHT = loudnessCanvas.height;
+        const LOUDNESS_WIDTH = loudnessCanvas.width;
+
+        // Function to draw the loudness meter
+        function drawLoudnessMeter() {
+          // TODO refactor so this is only called once
+          // Get frequency data
+          analyzer.getByteFrequencyData(dataArray);
+
+          // Calculate RMS amplitude
+          const rms = calculateRMS(dataArray);
+
+          // Update loudness variable
+
+          const referenceLevel = 255; // Adjust as needed
+
+          // Avoid log(0) by ensuring rms is not zero
+          const adjustedRMS = Math.max(rms, 1e-5);
+
+          const loudnessdB = 20 * Math.log10(adjustedRMS / referenceLevel);
+          document.getElementById("loudness").textContent =
+            Math.round(loudnessdB);
+
+          // Clear the canvas for the new frame
+          loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
+
+          // Draw the loudness meter
+          loudnessCanvasCtx.fillStyle = "dodgerblue";
+          const loudnessMeterHeight = (loudnessdB + 35) / 35 * LOUDNESS_HEIGHT;
+          loudnessCanvasCtx.fillRect(
+            LOUDNESS_WIDTH - 40,
+            LOUDNESS_HEIGHT - loudnessMeterHeight,
+            LOUDNESS_WIDTH,
+            loudnessMeterHeight
+          );
+
+          // Request the next animation frame
+          requestAnimationFrame(drawLoudnessMeter);
         }
 
         const drawSpectrum = () => {
@@ -142,6 +193,7 @@ document.querySelector("#start-button").addEventListener("click", () => {
         };
 
         drawSpectrum();
+        drawLoudnessMeter();
       })
       .catch(function (error) {
         // TODO Error handling
@@ -153,5 +205,3 @@ document.querySelector("#start-button").addEventListener("click", () => {
     console.error("MediaDevices API is not supported in this browser");
   }
 });
-
-// Check if the browser supports the MediaDevices API

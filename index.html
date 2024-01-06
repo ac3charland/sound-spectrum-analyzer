@@ -4,18 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <title>Hello World Page</title>
+    <title>Spectral Centroid Sound Meter</title>
   </head>
 
   <body>
     <h1>Sound Spectrum Analyzer</h1>
-    <canvas class="visualizer" width="700" height="300"></canvas>
+    <div class="flex">
+      <canvas id="spectrum-meter" width="700" height="300"></canvas>
+      <canvas id="loudness-meter" width="40" height="300"></canvas>
+    </div>
     <div class="flex">
       <div class="spectral-centroid-meter__container">
         <h2>Spectral Centroid</h2>
         <div>
-          <span id="spectral-centroid"></span>
+          <span id="spectral-centroid" class="output"></span>
           <span>hz</span>
+        </div>
+      </div>
+      <div class="spectral-centroid-meter__container">
+        <h2>Volume</h2>
+        <div>
+          <span id="loudness" class="output"></span>
+          <span>db</span>
         </div>
       </div>
       <button id="start-button">Start</button>
