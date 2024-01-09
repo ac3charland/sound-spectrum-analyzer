@@ -1,12 +1,13 @@
 // TODO Mobile view
 // TODO Refine flow (write stories)
+  // TODO Edge case: bluetooth microphone disconnect
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
 // TODO draw scales before start
 // TODO Reorganize code into:
   // TODO Lifecycle
   // TODO Drawing
   // TODO Audio Processing
-
+// TODO Contact/Social Media Links
 
 document.getElementById("start-button").addEventListener("click", () => {
   if (

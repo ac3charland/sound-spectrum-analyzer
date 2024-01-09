@@ -13,6 +13,10 @@ body {
         "Helvetica Neue",
         sans-serif;
     padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }
 
 canvas {
@@ -20,9 +24,15 @@ canvas {
     box-shadow: 1px 1px 8px #666;
 }
 
-a, a:visited {
+a,
+a:visited {
     text-decoration: none;
     color: inherit;
+}
+
+footer {
+    text-align: center;
+    padding: 0.5rem;
 }
 
 #spectrum-meter {
@@ -35,20 +45,40 @@ a, a:visited {
 }
 
 button {
-    margin: auto 0 auto 3rem;
     padding: 0.5rem;
     font-size: 1.5rem;
     cursor: pointer;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    background-color: rgba(0.1, 0.1, 0.1, 0.3);
+    border: 1px solid white;
+    border-radius: 0.6rem;
+    color: white;
+    transition: background-color 0.2s;
+
+    &:hover, &:focus {
+        background-color: rgba(0.1, 0.1, 0.1, 0.4);
+    }
 }
 
 #spectral-centroid {
     width: 4ch;
 }
 
+.page-content {
+    flex-grow: 2;
+}
+
 .output {
     font-size: 6rem;
     min-height: 6rem;
     display: inline-block;
+}
+
+.spectrum-canvas-wrapper {
+    position: relative;
 }
 
 .spectral-centroid-meter__container {

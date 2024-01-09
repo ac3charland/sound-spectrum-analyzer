@@ -7,44 +7,58 @@
       name="description"
       content="A free web-based sound spectrum analyzer that measures the percieved brightness of a sound by calculating the signal's spectral centroid."
     />
-    <meta name="keywords", content="brightness, spectral centroid, sound analyzer, sound spectrum analyzer" />
-    <meta name="author" content="Alex Charland alexcharland.com @alex_charland_music" />
+    <meta
+      name="keywords"
+      ,
+      content="brightness, spectral centroid, sound analyzer, sound spectrum analyzer"
+    />
+    <meta
+      name="author"
+      content="Alex Charland alexcharland.com @alex_charland_music"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Spectral Centroid Sound Meter</title>
   </head>
 
   <body>
-    <div class="flex">
-      <h1>
-        Sound Brightness Analyzer
-        <a
-          href="https://en.wikipedia.org/wiki/Spectral_centroid"
-          target="_blank"
-          >&#9432;</a
-        >
-      </h1>
-      <button id="start-button">Start</button>
-    </div>
-    <div class="flex">
-      <canvas id="spectrum-meter" width="700" height="300"></canvas>
-      <canvas id="loudness-meter" width="40" height="300"></canvas>
-    </div>
-    <div class="flex">
-      <div class="spectral-centroid-meter__container">
-        <h2>Spectral Centroid</h2>
-        <div>
-          <span id="spectral-centroid" class="output"></span>
-          <span>hz</span>
+    <div class="page-content">
+      <div class="flex">
+        <h1>
+          Sound Brightness Analyzer
+          <a
+            href="https://en.wikipedia.org/wiki/Spectral_centroid"
+            target="_blank"
+            >&#9432;</a
+          >
+        </h1>
+      </div>
+      <div class="flex">
+        <div class="spectrum-canvas-wrapper">
+          <button id="start-button">Start</button>
+          <canvas id="spectrum-meter" width="700" height="300"></canvas>
+        </div>
+        <canvas id="loudness-meter" width="40" height="300"></canvas>
+      </div>
+      <div class="flex">
+        <div class="spectral-centroid-meter__container">
+          <h2>Spectral Centroid</h2>
+          <div>
+            <span id="spectral-centroid" class="output"></span>
+            <span>hz</span>
+          </div>
+        </div>
+        <div class="spectral-centroid-meter__container">
+          <h2>Volume</h2>
+          <div>
+            <span id="loudness" class="output"></span>
+            <span>%</span>
+          </div>
         </div>
       </div>
-      <div class="spectral-centroid-meter__container">
-        <h2>Volume</h2>
-        <div>
-          <span id="loudness" class="output"></span>
-          <span>%</span>
-        </div>
-      </div>
     </div>
+    <footer>
+      Built by <a href="https://alexcharland.com">Alex Charland</a>
+    </footer>
     <script src="sound-analyzer.js"></script>
   </body>
 </html>
