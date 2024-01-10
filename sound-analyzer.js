@@ -25,9 +25,14 @@ if (
   (window.AudioContext || window.webkitAudioContext)
 ) {
   /*
-    2. BROWSER IS COMPATIBLE - ASK MICROPHONE PERMISSION
+    BROWSER IS COMPATIBLE
   */
 
+  // Set up audio context
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const analyzer = audioContext.createAnalyser();
+
+  // Set up loudness meter
   const loudnessCanvas = document.getElementById("loudness-meter");
   const loudnessCanvasCtx = loudnessCanvas.getContext("2d");
   const LOUDNESS_HEIGHT = loudnessCanvas.height;
@@ -54,19 +59,19 @@ if (
   }
   drawLoudnessScale();
 
+  /*
+    2. ASK MICROPHONE PERMISSION
+  */
   navigator.mediaDevices
     .getUserMedia({ audio: true })
-    .then((stream) => {
+    .then((micStream) => {
       document.getElementById("start-button").addEventListener("click", () => {
         // Hide start button after app start
         document.getElementById("start-button").hidden = true;
 
-        const audioContext = new (window.AudioContext ||
-          window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-
-        // Connect the audio source to an analyzer node
-        const analyzer = audioContext.createAnalyser();
+        // Resume the audio context and connect mic to the analyzer
+        audioContext.resume();
+        const source = audioContext.createMediaStreamSource(micStream);
         source.connect(analyzer);
 
         analyzer.fftSize = 2048;
