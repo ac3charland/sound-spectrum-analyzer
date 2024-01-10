@@ -1,7 +1,6 @@
 // TODO Mobile view
-// TODO Refine flow (write stories)
-// TODO Edge case: bluetooth microphone disconnect
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
+// TODO Edge case: bluetooth microphone disconnect
 // TODO draw scales before start
 // TODO Reorganize code into:
 // TODO Lifecycle
@@ -15,6 +14,8 @@ function showError(id) {
   document.getElementById("spectrum-meter").style.backgroundColor = "#777";
 }
 
+document.getElementById("current-year").textContent = new Date().getFullYear();
+
 /*
   1. CHECK BROWSER COMPATIBILITY
 */
@@ -26,6 +27,33 @@ if (
   /*
     2. BROWSER IS COMPATIBLE - ASK MICROPHONE PERMISSION
   */
+
+  const loudnessCanvas = document.getElementById("loudness-meter");
+  const loudnessCanvasCtx = loudnessCanvas.getContext("2d");
+  const LOUDNESS_HEIGHT = loudnessCanvas.height;
+  const LOUDNESS_WIDTH = loudnessCanvas.width;
+
+  function drawLoudnessScale() {
+    loudnessCanvasCtx.fillStyle = "black";
+    loudnessCanvasCtx.font = "10px Arial";
+    loudnessCanvasCtx.textAlign = "center";
+
+    const loudnessTicks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+
+    for (const loudness of loudnessTicks) {
+      loudnessCanvasCtx.fillRect(0, (LOUDNESS_HEIGHT * loudness) / 100, 4, 1);
+
+      if (loudness % 20 === 0) {
+        loudnessCanvasCtx.fillText(
+          loudness.toString(),
+          12,
+          LOUDNESS_HEIGHT - (LOUDNESS_HEIGHT * loudness) / 100 + 4
+        );
+      }
+    }
+  }
+  drawLoudnessScale();
+
   navigator.mediaDevices
     .getUserMedia({ audio: true })
     .then((stream) => {
@@ -116,36 +144,6 @@ if (
 
           // Draw line
           canvasCtx.fillRect(x, 0, 3, HEIGHT);
-        }
-
-        const loudnessCanvas = document.getElementById("loudness-meter");
-        const loudnessCanvasCtx = loudnessCanvas.getContext("2d");
-        const LOUDNESS_HEIGHT = loudnessCanvas.height;
-        const LOUDNESS_WIDTH = loudnessCanvas.width;
-
-        function drawLoudnessScale() {
-          loudnessCanvasCtx.fillStyle = "black";
-          loudnessCanvasCtx.font = "10px Arial";
-          loudnessCanvasCtx.textAlign = "center";
-
-          const loudnessTicks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
-
-          for (const loudness of loudnessTicks) {
-            loudnessCanvasCtx.fillRect(
-              0,
-              (LOUDNESS_HEIGHT * loudness) / 100,
-              4,
-              1
-            );
-
-            if (loudness % 20 === 0) {
-              loudnessCanvasCtx.fillText(
-                loudness.toString(),
-                12,
-                LOUDNESS_HEIGHT - (LOUDNESS_HEIGHT * loudness) / 100 + 4
-              );
-            }
-          }
         }
 
         // Function to draw the loudness meter
