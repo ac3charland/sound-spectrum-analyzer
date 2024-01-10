@@ -1,31 +1,40 @@
 // TODO Mobile view
 // TODO Refine flow (write stories)
-  // TODO Edge case: bluetooth microphone disconnect
+// TODO Edge case: bluetooth microphone disconnect
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
 // TODO draw scales before start
 // TODO Reorganize code into:
-  // TODO Lifecycle
-  // TODO Drawing
-  // TODO Audio Processing
+// TODO Lifecycle
+// TODO Drawing
+// TODO Audio Processing
 // TODO Contact/Social Media Links
 
-document.getElementById("start-button").addEventListener("click", () => {
-  if (
-    navigator.mediaDevices &&
-    navigator.mediaDevices.getUserMedia &&
-    (window.AudioContext || window.webkitAudioContext)
-  ) {
-    const audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
-    // Request microphone permission
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then(function (stream) {
+function showError(id) {
+  document.getElementById(id).style.display = "block";
+  document.getElementById("start-button").style.display = "none";
+  document.getElementById("spectrum-meter").style.backgroundColor = "#777";
+}
 
+/*
+  1. CHECK BROWSER COMPATIBILITY
+*/
+if (
+  navigator.mediaDevices &&
+  navigator.mediaDevices.getUserMedia &&
+  (window.AudioContext || window.webkitAudioContext)
+) {
+  /*
+    2. BROWSER IS COMPATIBLE - ASK MICROPHONE PERMISSION
+  */
+  navigator.mediaDevices
+    .getUserMedia({ audio: true })
+    .then((stream) => {
+      document.getElementById("start-button").addEventListener("click", () => {
         // Hide start button after app start
         document.getElementById("start-button").hidden = true;
 
-
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
         const source = audioContext.createMediaStreamSource(stream);
 
         // Connect the audio source to an analyzer node
@@ -119,15 +128,22 @@ document.getElementById("start-button").addEventListener("click", () => {
           loudnessCanvasCtx.font = "10px Arial";
           loudnessCanvasCtx.textAlign = "center";
 
-          const loudnessTicks = [
-            10, 20, 30, 40, 50, 60, 70, 80, 90
-          ]
+          const loudnessTicks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
 
           for (const loudness of loudnessTicks) {
-            loudnessCanvasCtx.fillRect(0, LOUDNESS_HEIGHT * loudness / 100, 4, 1);
+            loudnessCanvasCtx.fillRect(
+              0,
+              (LOUDNESS_HEIGHT * loudness) / 100,
+              4,
+              1
+            );
 
             if (loudness % 20 === 0) {
-              loudnessCanvasCtx.fillText(loudness.toString(), 12, LOUDNESS_HEIGHT - LOUDNESS_HEIGHT * loudness / 100 + 4);
+              loudnessCanvasCtx.fillText(
+                loudness.toString(),
+                12,
+                LOUDNESS_HEIGHT - (LOUDNESS_HEIGHT * loudness) / 100 + 4
+              );
             }
           }
         }
@@ -147,17 +163,17 @@ document.getElementById("start-button").addEventListener("click", () => {
 
           const referenceLevel = 255; // Adjust as needed
 
-          const percent = Math.round(avgAmp / referenceLevel * 100);
+          const percent = Math.round((avgAmp / referenceLevel) * 100);
 
-          document.getElementById("loudness").textContent =
-            percent;
+          document.getElementById("loudness").textContent = percent;
 
           // Clear the canvas for the new frame
           loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
 
           // Draw the loudness meter
           loudnessCanvasCtx.fillStyle = "dodgerblue";
-          const loudnessMeterHeight = (avgAmp / referenceLevel) * LOUDNESS_HEIGHT;
+          const loudnessMeterHeight =
+            (avgAmp / referenceLevel) * LOUDNESS_HEIGHT;
           loudnessCanvasCtx.fillRect(
             LOUDNESS_WIDTH - 40,
             LOUDNESS_HEIGHT - loudnessMeterHeight,
@@ -215,20 +231,22 @@ document.getElementById("start-button").addEventListener("click", () => {
           canvasCtx.stroke();
           drawSpectralCentroidLine(spectralCentroid);
           drawFrequencyScale();
-          
+
           requestAnimationFrame(drawSpectrum);
         };
         drawSpectrum();
         drawLoudnessMeter();
-        
-      })
-      .catch(function (error) {
-        // TODO Error handling
-        // Handle errors, such as the user denying permission
-        console.error("Error accessing microphone:", error);
       });
-  } else {
-    // TODO Error handling
-    console.error("MediaDevices API is not supported in this browser");
-  }
-});
+    })
+    .catch(() => {
+      /*
+        MICROPHONE PERMISSION DENIED
+      */
+      showError("microphone-permission-error");
+    });
+} else {
+  /*
+  BROWSER NOT COMPATIBLE
+*/
+  showError("browser-compatibility-error");
+}

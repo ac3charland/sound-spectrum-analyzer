@@ -44,7 +44,7 @@ footer {
     background-color: #777;
 }
 
-button {
+#start-button {
     padding: 0.5rem;
     font-size: 1.5rem;
     cursor: pointer;
@@ -58,9 +58,23 @@ button {
     color: white;
     transition: background-color 0.2s;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         background-color: rgba(0.1, 0.1, 0.1, 0.4);
     }
+}
+
+.error-message {
+    display: none;
+
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: 100%;
+    text-align: center;
 }
 
 #spectral-centroid {
