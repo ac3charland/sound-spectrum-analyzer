@@ -8,10 +8,92 @@
 // TODO Audio Processing
 // TODO Contact/Social Media Links
 
+/*
+  GENERAL PAGE FUNCTIONS
+*/
+
 function showError(id) {
   document.getElementById(id).style.display = "block";
   document.getElementById("start-button").style.display = "none";
   document.getElementById("spectrum-meter").style.backgroundColor = "#777";
+}
+
+/*
+  DRAWING FUNCTIONS
+*/
+
+function convertFrequencyToX(frequency, maxFreqLog, width) {
+  if (!frequency || !maxFreqLog || !width) {
+    console.error("convertFrequencyToX: Missing arguments");
+    return
+  }
+  const offSet = 0.41;
+  const logFreq = Math.log10(frequency);
+  // 1. Figure out how high the freq is in the range as a percent
+  const percent = logFreq / maxFreqLog;
+
+  // 2. Convert that percentage to an X coordinate
+  return percent * width * (1 + offSet) - width * offSet;
+}
+
+const scaleFillColor = "black";
+const scaleFont = "10px Arial";
+
+function drawFrequencyScale(ctx, width, height, maxFreqLog) {
+  if (!ctx || !width || !height || maxFreqLog) {
+    console.error("drawFrequencyScale: Missing arguments");
+    return;
+  }
+  // TODO DRY color & style
+  ctx.fillStyle = scaleFillColor;
+  ctx.font = scaleFont;
+  ctx.textAlign = "center";
+
+  const frequencyTicks = [
+    20, 50, 100, 200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000, 10000, 20000,
+  ];
+  for (const frequency of frequencyTicks) {
+    // Map the logarithmic frequency to the canvas width
+    const x = convertFrequencyToX(frequency, maxFreqLog, width);
+
+    // Draw tick mark
+    ctx.fillRect(x, height - 5, 1, 5);
+
+    // Draw frequency label
+    if (
+      frequency === 20 ||
+      frequency === 50 ||
+      frequency === 100 ||
+      frequency === 1000 ||
+      frequency === 10000 ||
+      frequency === 20000
+    )
+      ctx.fillText(frequency.toString(), x, height - 10);
+  }
+}
+
+function drawLoudnessScale(ctx, height) {
+  if (!ctx || !height) {
+    console.error("drawLoudnessScale: Missing arguments");
+    return;
+  }
+  ctx.fillStyle = scaleFillColor;
+  ctx.font = scaleFont;
+  ctx.textAlign = "center";
+
+  const loudnessTicks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+
+  for (const loudness of loudnessTicks) {
+    ctx.fillRect(0, (height * loudness) / 100, 4, 1);
+
+    if (loudness % 20 === 0) {
+      ctx.fillText(
+        loudness.toString(),
+        12,
+        height - (height * loudness) / 100 + 4
+      );
+    }
+  }
 }
 
 document.getElementById("current-year").textContent = new Date().getFullYear();
@@ -31,33 +113,22 @@ if (
   // Set up audio context
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
   const analyzer = audioContext.createAnalyser();
+  const MAX_FREQ = analyzer.context.sampleRate / 2;
+  const MAX_FREQ_LOG = Math.log10(MAX_FREQ);
+
+  // Set up frequency visualizer
+  const canvas = document.querySelector("#spectrum-meter");
+  const canvasCtx = canvas.getContext("2d");
+  const WIDTH = canvas.width;
+  const HEIGHT = canvas.height;
+  drawFrequencyScale(canvasCtx, WIDTH, HEIGHT, MAX_FREQ_LOG);
 
   // Set up loudness meter
   const loudnessCanvas = document.getElementById("loudness-meter");
   const loudnessCanvasCtx = loudnessCanvas.getContext("2d");
   const LOUDNESS_HEIGHT = loudnessCanvas.height;
   const LOUDNESS_WIDTH = loudnessCanvas.width;
-
-  function drawLoudnessScale() {
-    loudnessCanvasCtx.fillStyle = "black";
-    loudnessCanvasCtx.font = "10px Arial";
-    loudnessCanvasCtx.textAlign = "center";
-
-    const loudnessTicks = [10, 20, 30, 40, 50, 60, 70, 80, 90];
-
-    for (const loudness of loudnessTicks) {
-      loudnessCanvasCtx.fillRect(0, (LOUDNESS_HEIGHT * loudness) / 100, 4, 1);
-
-      if (loudness % 20 === 0) {
-        loudnessCanvasCtx.fillText(
-          loudness.toString(),
-          12,
-          LOUDNESS_HEIGHT - (LOUDNESS_HEIGHT * loudness) / 100 + 4
-        );
-      }
-    }
-  }
-  drawLoudnessScale();
+  drawLoudnessScale(loudnessCanvasCtx, LOUDNESS_HEIGHT);
 
   /*
     2. ASK MICROPHONE PERMISSION
@@ -75,19 +146,10 @@ if (
         source.connect(analyzer);
 
         analyzer.fftSize = 2048;
-        const MAX_FREQ = analyzer.context.sampleRate / 2;
-        const MAX_FREQ_LOG = Math.log10(MAX_FREQ);
         const BUFFER_LENGTH = analyzer.frequencyBinCount;
 
         // This will contain the audio data for each frame
         const dataArray = new Uint8Array(BUFFER_LENGTH);
-
-        // Set up canvas context for visualizer
-        const canvas = document.querySelector("#spectrum-meter");
-        const canvasCtx = canvas.getContext("2d");
-
-        const WIDTH = canvas.width;
-        const HEIGHT = canvas.height;
 
         let displayUpdateCounter = 0;
         const displayUpdateFPS = 2;
@@ -100,47 +162,6 @@ if (
         function calculateAvgAmp(dataArray) {
           const arraySum = dataArray.reduce((a, value) => a + value, 0);
           return arraySum / dataArray.length;
-        }
-
-        function convertFrequencyToX(frequency) {
-          const offSet = 0.41;
-          const logFreq = Math.log10(frequency);
-          // 1. Figure out how high the freq is in the range as a percent
-          const percent = logFreq / MAX_FREQ_LOG;
-
-          // 2. Convert that percentage to an X coordinate
-          return percent * WIDTH * (1 + offSet) - WIDTH * offSet;
-        }
-
-        // Draw the frequency scale
-        function drawFrequencyScale() {
-          // TODO DRY color & style
-          canvasCtx.fillStyle = "black";
-          canvasCtx.font = "10px Arial";
-          canvasCtx.textAlign = "center";
-
-          const frequencyTicks = [
-            20, 50, 100, 200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000,
-            10000, 20000,
-          ];
-          for (const frequency of frequencyTicks) {
-            // Map the logarithmic frequency to the canvas width
-            const x = convertFrequencyToX(frequency);
-
-            // Draw tick mark
-            canvasCtx.fillRect(x, HEIGHT - 5, 1, 5);
-
-            // Draw frequency label
-            if (
-              frequency === 20 ||
-              frequency === 50 ||
-              frequency === 100 ||
-              frequency === 1000 ||
-              frequency === 10000 ||
-              frequency === 20000
-            )
-              canvasCtx.fillText(frequency.toString(), x, HEIGHT - 10);
-          }
         }
 
         function drawSpectralCentroidLine(spectralCentroid) {
@@ -184,7 +205,7 @@ if (
             loudnessMeterHeight
           );
 
-          drawLoudnessScale();
+          drawLoudnessScale(loudnessCanvasCtx, LOUDNESS_HEIGHT);
           // Request the next animation frame
           requestAnimationFrame(drawLoudnessMeter);
         }
@@ -211,7 +232,7 @@ if (
             const centerFrequency =
               (i * analyzer.context.sampleRate) / analyzer.fftSize;
 
-            const x = convertFrequencyToX(centerFrequency);
+            const x = convertFrequencyToX(centerFrequency, MAX_FREQ_LOG, WIDTH);
             const y = HEIGHT - (amplitude / 255) * HEIGHT;
 
             sum += amplitude * centerFrequency;
@@ -233,7 +254,7 @@ if (
           }
           canvasCtx.stroke();
           drawSpectralCentroidLine(spectralCentroid);
-          drawFrequencyScale();
+          drawFrequencyScale(canvasCtx, WIDTH, HEIGHT, MAX_FREQ_LOG);
 
           requestAnimationFrame(drawSpectrum);
         };
