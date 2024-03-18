@@ -1,7 +1,8 @@
+// TODO fix missing argument console errors
+// TODO make framerate of volume same as frequency
 // TODO Mobile view
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
 // TODO Edge case: bluetooth microphone disconnect
-// TODO draw scales before start
 // TODO Reorganize code into:
 // TODO Lifecycle
 // TODO Drawing
@@ -40,11 +41,22 @@ const scaleFillColor = "black";
 const scaleFont = "10px Arial";
 
 function drawFrequencyScale(ctx, width, height, maxFreqLog) {
-  if (!ctx || !width || !height || maxFreqLog) {
+  if (!ctx || !width || !height || !maxFreqLog) {
     console.error("drawFrequencyScale: Missing arguments");
+    if (!ctx) {
+      console.error("ctx is falsy")
+    }
+    if (!width) {
+      console.error("width is falsy");
+    }
+    if (!height) {
+      console.error("height is falsy");
+    }
+    if (!maxFreqLog) {
+      console.error("maxFreqLog is falsy");
+    }
     return;
   }
-  // TODO DRY color & style
   ctx.fillStyle = scaleFillColor;
   ctx.font = scaleFont;
   ctx.textAlign = "center";
@@ -255,7 +267,7 @@ if (
           canvasCtx.stroke();
           drawSpectralCentroidLine(spectralCentroid);
           drawFrequencyScale(canvasCtx, WIDTH, HEIGHT, MAX_FREQ_LOG);
-
+          
           requestAnimationFrame(drawSpectrum);
         };
         drawSpectrum();

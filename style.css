@@ -30,6 +30,12 @@ a:visited {
     color: inherit;
 }
 
+
+h2 {
+    margin: 0;
+
+}
+
 footer {
     text-align: center;
     padding: 0.5rem;
@@ -113,5 +119,8 @@ footer {
 .flex {
     display: flex;
     max-width: 900px;
+}
+
+.bottom-spacing {
     margin-bottom: 2rem;
 }
