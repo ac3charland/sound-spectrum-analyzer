@@ -1,4 +1,4 @@
-// TODO fix missing argument console errors
+// TODO NaN hz bug
 // TODO make framerate of volume same as frequency
 // TODO Mobile view
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
@@ -24,8 +24,17 @@ function showError(id) {
 */
 
 function convertFrequencyToX(frequency, maxFreqLog, width) {
-  if (!frequency || !maxFreqLog || !width) {
+  if (frequency === undefined || !maxFreqLog || !width) {
     console.error("convertFrequencyToX: Missing arguments");
+    if (frequency === undefined) {
+      console.error('missing frequency')
+    }
+    if (!maxFreqLog) {
+      console.error("missing maxFreqLog");
+    }
+    if (!width) {
+      console.error("missing width");
+    }
     return
   }
   const offSet = 0.41;
@@ -178,7 +187,7 @@ if (
 
         function drawSpectralCentroidLine(spectralCentroid) {
           canvasCtx.fillStyle = "white";
-          const x = convertFrequencyToX(spectralCentroid);
+          const x = convertFrequencyToX(spectralCentroid, MAX_FREQ_LOG, WIDTH);
 
           // Draw line
           canvasCtx.fillRect(x, 0, 3, HEIGHT);
