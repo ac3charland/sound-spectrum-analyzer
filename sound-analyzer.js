@@ -1,4 +1,3 @@
-// TODO NaN hz bug
 // TODO make framerate of volume same as frequency
 // TODO Mobile view
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
@@ -216,6 +215,7 @@ if (
           loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
 
           // Draw the loudness meter
+          // TODO here is the loudness meter logic
           loudnessCanvasCtx.fillStyle = "dodgerblue";
           const loudnessMeterHeight =
             (avgAmp / referenceLevel) * LOUDNESS_HEIGHT;
@@ -266,7 +266,9 @@ if (
             }
           }
 
-          const spectralCentroid = Math.round(sum / totalWeight);
+          const spectralCentroid = totalWeight ? Math.round(sum / totalWeight) : 0;
+          // TODO here is the update counter
+          // TODO break this outside
           if (displayUpdateCounter === Math.round(16 / displayUpdateFPS)) {
             spectralCentroidDisplay.textContent = spectralCentroid;
             displayUpdateCounter = 0;
