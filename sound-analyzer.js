@@ -1,4 +1,3 @@
-// TODO make framerate of volume same as frequency
 // TODO Mobile view
 // TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
 // TODO Edge case: bluetooth microphone disconnect
@@ -26,7 +25,7 @@ function convertFrequencyToX(frequency, maxFreqLog, width) {
   if (frequency === undefined || !maxFreqLog || !width) {
     console.error("convertFrequencyToX: Missing arguments");
     if (frequency === undefined) {
-      console.error('missing frequency')
+      console.error("missing frequency");
     }
     if (!maxFreqLog) {
       console.error("missing maxFreqLog");
@@ -34,7 +33,7 @@ function convertFrequencyToX(frequency, maxFreqLog, width) {
     if (!width) {
       console.error("missing width");
     }
-    return
+    return;
   }
   const offSet = 0.41;
   const logFreq = Math.log10(frequency);
@@ -52,7 +51,7 @@ function drawFrequencyScale(ctx, width, height, maxFreqLog) {
   if (!ctx || !width || !height || !maxFreqLog) {
     console.error("drawFrequencyScale: Missing arguments");
     if (!ctx) {
-      console.error("ctx is falsy")
+      console.error("ctx is falsy");
     }
     if (!width) {
       console.error("width is falsy");
@@ -209,7 +208,9 @@ if (
 
           const percent = Math.round((avgAmp / referenceLevel) * 100);
 
-          document.getElementById("loudness").textContent = percent;
+          if (displayUpdateCounter === Math.round(16 / displayUpdateFPS)) {
+            document.getElementById("loudness").textContent = percent;
+          }
 
           // Clear the canvas for the new frame
           loudnessCanvasCtx.clearRect(0, 0, LOUDNESS_WIDTH, LOUDNESS_HEIGHT);
@@ -266,7 +267,9 @@ if (
             }
           }
 
-          const spectralCentroid = totalWeight ? Math.round(sum / totalWeight) : 0;
+          const spectralCentroid = totalWeight
+            ? Math.round(sum / totalWeight)
+            : 0;
           // TODO here is the update counter
           // TODO break this outside
           if (displayUpdateCounter === Math.round(16 / displayUpdateFPS)) {
@@ -278,7 +281,7 @@ if (
           canvasCtx.stroke();
           drawSpectralCentroidLine(spectralCentroid);
           drawFrequencyScale(canvasCtx, WIDTH, HEIGHT, MAX_FREQ_LOG);
-          
+
           requestAnimationFrame(drawSpectrum);
         };
         drawSpectrum();
