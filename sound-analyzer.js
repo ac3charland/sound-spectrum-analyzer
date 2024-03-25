@@ -138,6 +138,7 @@ if (
   // Set up frequency visualizer
   const canvas = document.querySelector("#spectrum-meter");
   const canvasCtx = canvas.getContext("2d");
+  // TODO Add screen resize event listener to set WIDTH
   const WIDTH = canvas.width;
   const HEIGHT = canvas.height;
   drawFrequencyScale(canvasCtx, WIDTH, HEIGHT, MAX_FREQ_LOG);

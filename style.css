@@ -30,10 +30,8 @@ a:visited {
     color: inherit;
 }
 
-
 h2 {
     margin: 0;
-
 }
 
 footer {
@@ -42,6 +40,11 @@ footer {
 }
 
 #spectrum-meter {
+    /* TODO make width controlled here */
+    /* Width 700 and max-width 100%*/
+    width: 700px;
+    max-width: 100%;
+    height: 300px;
     background-color: dodgerblue;
 }
 
@@ -103,6 +106,7 @@ footer {
 
 .spectral-centroid-meter__container {
     margin-right: 2rem;
+    margin-bottom: 2rem;
     border-radius: 1rem;
     background-color: #888;
     color: white;
@@ -111,9 +115,17 @@ footer {
     width: 17rem;
     box-shadow: 1px 1px 8px #666;
 
+    display: flex;
+    flex-direction: column;
+
     h2 {
         margin: 0;
+        flex-grow: 2;
     }
+}
+
+.spectral-centroid-meter__container:last-child {
+    margin-right: 0;
 }
 
 .flex {
@@ -123,4 +135,29 @@ footer {
 
 .bottom-spacing {
     margin-bottom: 2rem;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    footer a {
+        text-decoration: underline;
+    }
+
+    .spectrum-canvas-wrapper {
+        max-width: 100%;
+    }
+
+    #loudness-meter {
+        display: none;
+    }
+
+    .output {
+        font-size: 3rem;
+        min-height: auto;
+    }
+
+    .spectral-centroid-meter__container {
+        flex: 1;
+        width: auto;
+    }
 }
