@@ -196,7 +196,7 @@ footer {
         text-align: center;
     }
 
-    footer a {
+    .footer-link {
         text-decoration: underline;
     }
 
