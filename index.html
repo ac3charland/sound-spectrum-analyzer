@@ -23,16 +23,18 @@
   <body>
     <div class="page-content">
       <div class="flex">
-        <h1>
-          Sound Brightness Analyzer
-          <a
-            href="https://en.wikipedia.org/wiki/Spectral_centroid"
-            target="_blank"
-            >&#9432;</a
-          >
-        </h1>
+        <h1>Sound Brightness Analyzer</h1>
       </div>
-      <h2 class="bottom-spacing">Measure the brightness of a frequency spectrum using the spectral centroid method</h2>
+      <h2 class="subtitle bottom-spacing">
+        Measure the brightness of a frequency spectrum using the spectral
+        centroid method
+        <a
+          id="info-link"
+          href="https://en.wikipedia.org/wiki/Spectral_centroid"
+          target="_blank"
+          >&#9432;</a
+        >
+      </h2>
       <div class="flex bottom-spacing">
         <div class="spectrum-canvas-wrapper">
           <button id="start-button">Start</button>
@@ -48,25 +50,35 @@
       </div>
       <div class="flex">
         <div class="spectral-centroid-meter__container">
-          <h2>Spectral Centroid</h2>
           <div class="output-wrapper">
             <span id="spectral-centroid" class="output"></span>
-            <span>hz</span>
+            <span class="unit">hz</span>
           </div>
+          <h2 class="light-label">Spectral Centroid</h2>
         </div>
         <div class="spectral-centroid-meter__container">
-          <h2>Volume</h2>
           <div class="output-wrapper">
             <span id="loudness" class="output"></span>
-            <span>%</span>
+            <span class="unit">%</span>
           </div>
+          <h2 class="light-label">Volume</h2>
         </div>
       </div>
     </div>
-    <footer>
-      <div>Built in pure HTML, CSS, and JavaScript</div>
+    <footer class="light-label">
+      <div>Built in pure HTML, CSS, and JavaScript.</div>
       &copy;<span id="current-year">2024</span> by
-      <a href="https://alexcharland.com">Alex Charland</a>
+      <a href="https://alexcharland.com" class="footer-link">Alex Charland</a>
+      <a href="https://www.instagram.com/alex_charland_music/">
+        <img class="contact-icon" src="assets/instagram.svg" width="20" height="20" />
+      </a>
+      <a href="https://www.linkedin.com/in/alex-charland/">
+        <img class="contact-icon" src="assets/linkedin.svg" width="20" height="20" />
+      </a>
+      <a href="https://github.com/ac3charland">
+        <img class="contact-icon" src="assets/square-github.svg" width="20" height="20" />
+      </a>
+      <div class="disclaimer">This page is <a class="footer-link" href="https://jeffhuang.com/designed_to_last/">designed to last</a></div>
     </footer>
     <script src="sound-analyzer.js"></script>
   </body>

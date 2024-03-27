@@ -17,11 +17,12 @@ body {
     flex-direction: column;
     min-height: 100vh;
     margin: 0;
+    background-color: #333;
 }
 
 canvas {
     border-radius: 0.3rem;
-    box-shadow: 1px 1px 8px #666;
+    box-shadow: 1px 1px 8px #222;
 }
 
 a,
@@ -30,13 +31,25 @@ a:visited {
     color: inherit;
 }
 
+h1 {
+    color: white;
+    font-weight: 100;
+    margin-bottom: 0rem;
+}
+
 h2 {
     margin: 0;
 }
 
 footer {
-    text-align: center;
     padding: 0.5rem;
+    color: #bbb;
+}
+
+#info-link {
+    font-size: 1rem;
+    vertical-align: top;
+    color: white;
 }
 
 #spectrum-meter {
@@ -49,7 +62,7 @@ footer {
 }
 
 #loudness-meter {
-    background-color: #777;
+    background-color: #555;
 }
 
 #start-button {
@@ -72,6 +85,16 @@ footer {
     }
 }
 
+#spectral-centroid {
+    width: 4ch;
+}
+
+.subtitle {
+    font-weight: 200;
+    font-size: 1.5rem;
+    max-width: 700px;
+}
+
 .error-message {
     display: none;
 
@@ -85,23 +108,36 @@ footer {
     text-align: center;
 }
 
-#spectral-centroid {
-    width: 4ch;
+.light-label {
+    font-weight: 200;
+    font-size: 1rem;
+    color: #bbb;
 }
 
 .page-content {
     flex-grow: 2;
     max-width: 756px;
+    margin: 0 auto;
 }
 
 .output-wrapper {
+    display: flex;
     min-height: 7rem;
+    align-items: end;
+    gap: 1rem;
 }
 
 .output {
     font-size: 6rem;
-    min-height: 6rem;
+    font-weight: 800;
+    letter-spacing: -4px;
+    line-height: 1;
     display: inline-block;
+    flex-grow: 1;
+}
+
+.unit {
+    margin-bottom: 0.3rem;
 }
 
 .spectrum-canvas-wrapper {
@@ -111,18 +147,18 @@ footer {
 .spectral-centroid-meter__container {
     margin-bottom: 2rem;
     border-radius: 1rem;
-    background-color: #888;
+    background-color: #555;
     color: white;
-    padding: 1rem;
+    padding: 0 1rem 1rem;
     text-align: right;
     flex: 1;
-    box-shadow: 1px 1px 8px #666;
+    box-shadow: 1px 1px 8px #222;
 
     display: flex;
     flex-direction: column;
 
     h2 {
-        margin: 0;
+        margin-top: 1rem;
         flex-grow: 2;
     }
 }
@@ -141,8 +177,26 @@ footer {
     margin-bottom: 2rem;
 }
 
+.footer-link {
+    font-weight: 500;
+}
+
+.contact-icon {
+    margin-bottom: -4px;
+    cursor: pointer;
+}
+
+.disclaimer {
+    margin-top: 0.2rem;
+    font-size: 0.7rem;
+}
+
 /* Mobile styles */
 @media (max-width: 600px) {
+    footer {
+        text-align: center;
+    }
+
     footer a {
         text-decoration: underline;
     }
@@ -160,8 +214,13 @@ footer {
         min-height: auto;
     }
 
+    .output-wrapper {
+        min-height: 3.5rem;
+    }
+
     .spectral-centroid-meter__container {
         flex: 1;
         width: auto;
+        padding: 0.5rem 1rem;
     }
 }

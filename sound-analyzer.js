@@ -1,10 +1,4 @@
-// TODO fix visual bug where meter jumps when player starts
 // TODO Edge case: bluetooth microphone disconnect
-// TODO Reorganize code into:
-// TODO Lifecycle
-// TODO Drawing
-// TODO Audio Processing
-// TODO Contact/Social Media Links
 
 /*
   GENERAL PAGE FUNCTIONS
@@ -43,7 +37,7 @@ function convertFrequencyToX(frequency, maxFreqLog, width) {
   return percent * width * (1 + offSet) - width * offSet;
 }
 
-const scaleFillColor = "black";
+const scaleFillColor = "white";
 const scaleFont = "10px Arial";
 
 function drawFrequencyScale(ctx, width, height, maxFreqLog) {
@@ -297,6 +291,6 @@ if (
 } else {
   /*
   BROWSER NOT COMPATIBLE
-*/
+  */
   showError("browser-compatibility-error");
 }
