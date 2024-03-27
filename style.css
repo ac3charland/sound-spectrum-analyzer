@@ -49,7 +49,6 @@ footer {
 }
 
 #loudness-meter {
-    margin-left: 1rem;
     background-color: #777;
 }
 
@@ -92,6 +91,11 @@ footer {
 
 .page-content {
     flex-grow: 2;
+    max-width: 756px;
+}
+
+.output-wrapper {
+    min-height: 7rem;
 }
 
 .output {
@@ -105,14 +109,13 @@ footer {
 }
 
 .spectral-centroid-meter__container {
-    margin-right: 2rem;
     margin-bottom: 2rem;
     border-radius: 1rem;
     background-color: #888;
     color: white;
     padding: 1rem;
     text-align: right;
-    width: 17rem;
+    flex: 1;
     box-shadow: 1px 1px 8px #666;
 
     display: flex;
@@ -130,7 +133,8 @@ footer {
 
 .flex {
     display: flex;
-    max-width: 900px;
+    justify-content: space-between;
+    gap: 2rem;
 }
 
 .bottom-spacing {

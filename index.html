@@ -42,21 +42,21 @@
           <h2 id="microphone-permission-error" class="error-message">
             Microphone permissions are disabled.
           </h2>
-          <canvas id="spectrum-meter"></canvas>
+          <canvas id="spectrum-meter" width="700" height="300"></canvas>
         </div>
         <canvas id="loudness-meter" width="40" height="300"></canvas>
       </div>
       <div class="flex">
         <div class="spectral-centroid-meter__container">
           <h2>Spectral Centroid</h2>
-          <div>
+          <div class="output-wrapper">
             <span id="spectral-centroid" class="output"></span>
             <span>hz</span>
           </div>
         </div>
         <div class="spectral-centroid-meter__container">
           <h2>Volume</h2>
-          <div>
+          <div class="output-wrapper">
             <span id="loudness" class="output"></span>
             <span>%</span>
           </div>

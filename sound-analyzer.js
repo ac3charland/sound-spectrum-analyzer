@@ -1,5 +1,4 @@
-// TODO Mobile view
-// TODO dynamic canvas size https://www.tutorialspoint.com/HTML5-Canvas-fit-to-window
+// TODO fix visual bug where meter jumps when player starts
 // TODO Edge case: bluetooth microphone disconnect
 // TODO Reorganize code into:
 // TODO Lifecycle
