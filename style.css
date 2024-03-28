@@ -196,16 +196,20 @@ footer {
         text-align: center;
     }
 
+    #loudness-meter {
+        display: none;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
     .footer-link {
         text-decoration: underline;
     }
 
     .spectrum-canvas-wrapper {
         max-width: 100%;
-    }
-
-    #loudness-meter {
-        display: none;
     }
 
     .output {
