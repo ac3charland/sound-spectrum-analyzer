@@ -79,8 +79,14 @@ function drawFrequencyScale(ctx, width, height, maxFreqLog) {
       frequency === 1000 ||
       frequency === 10000 ||
       frequency === 20000
-    )
-      ctx.fillText(frequency.toString(), x, height - 10);
+    ) {
+      if (frequency < 10000) {
+        ctx.fillText(frequency.toString(), x, height - 10);
+      }
+      else {
+        ctx.fillText(`${(frequency / 1000).toString()}k`, x, height - 10);
+      }
+    }
   }
 }
 
